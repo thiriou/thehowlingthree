@@ -21,7 +21,6 @@
   --line-strong: rgba(236, 229, 216, 0.32);
 
   --font-sans: "Inter", "Helvetica Neue", Arial, "Segoe UI", sans-serif;
-  --font-serif: "EB Garamond", Georgia, serif;
 
   --max-width: 1120px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -113,13 +112,6 @@ em {
   font-size: 15.5px;
   max-width: 620px;
   line-height: 1.8;
-}
-
-.section-sub em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--text);
 }
 
 .icon {
@@ -286,18 +278,18 @@ em {
 --------------------------------------------------------------------- */
 .hero {
   position: relative;
-  min-height: 88svh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
-  padding: 110px 0 72px;
+  padding: 110px 0 var(--sp-7);
   border-bottom: 1px solid var(--line);
 }
 
 .hero-inner {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.35fr 0.65fr;
   align-items: center;
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: clamp(2rem, 8vw, 6rem);
 }
 
 .hero-visual {
@@ -319,16 +311,18 @@ em {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 26px;
-  padding-top: 8vh;
+  gap: var(--sp-4);
+  padding-top: 6vh;
 }
 
 .hero-desc {
-  max-width: 380px;
+  max-width: 360px;
   font-family: var(--font-sans);
-  font-size: 15.5px;
-  line-height: 1.8;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.55;
+  letter-spacing: -0.005em;
   color: var(--text-muted);
+  font-weight: 500;
 }
 
 .hero-actions {
@@ -415,21 +409,6 @@ em {
   gap: 10px;
 }
 
-.hero-player {
-  width: 100%;
-  max-width: 420px;
-  border: 1px solid var(--line);
-  overflow: hidden;
-  background: var(--bg-raised);
-}
-
-.hero-player iframe {
-  width: 100%;
-  height: 152px;
-  display: block;
-  border: 0;
-}
-
 /* ---------------------------------------------------------------------
    Episodes — a catalogue, not a card grid
 --------------------------------------------------------------------- */
@@ -485,9 +464,10 @@ em {
 
 .record {
   display: grid;
-  grid-template-columns: 168px 1fr;
-  gap: var(--sp-5);
-  padding: var(--sp-5) 0;
+  grid-template-columns: clamp(120px, 18vw, 224px) 1fr;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -505,9 +485,34 @@ em {
    line, the way an archival photograph is mounted rather than glued
    edge-to-edge. */
 .record-frame {
-  padding: 7px;
-  background: var(--bg-raised);
-  border: 1px solid var(--line);
+  position: relative;
+}
+
+/* Records whose print was sourced from the channel's own video archive
+   (no unique cover was ever issued to Spotify) already carry the show's
+   outline wordmark baked into the still — every video uses the same
+   title-card template over a square source clip. YouTube pads that
+   square into a 1280×720 thumbnail with a 280px black bar on each side;
+   object-fit:cover above trims exactly that padding (never the artwork),
+   leaving a true 720×720 print. The box below registers the filled mark
+   onto the existing outline within THAT cropped frame. Measured per-image
+   across all 86 thumbnails individually (connected-component analysis,
+   filtering isolated bright specular highlights in the photos themselves
+   from the actual glyph strokes) — glyph at x 303–978, y 110–610 of the
+   1280×720 source is the confirmed template position, matched exactly or
+   within 1px by half the archive and the true value for all of them. */
+.record-frame--yt::after {
+  content: "";
+  position: absolute;
+  left: 2.7%;
+  top: 2.57%;
+  width: 94.72%;
+  height: 94.72%;
+  background-image: url("thehowlingthreelogo-mark.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
 }
 
 .record-frame img {
@@ -548,33 +553,44 @@ em {
 
 .episode-title {
   font-family: var(--font-sans);
-  font-size: 17px;
   font-weight: 700;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
   color: var(--text);
-  line-height: 1.4;
+  font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+  line-height: 1.3;
   margin: 0;
 }
 
+/* One caption line, the way a catalogue plate is captioned — not a form. */
 .record-fields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sp-2) var(--sp-4);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
   margin: var(--sp-3) 0;
   padding: 0;
 }
 
 .record-fields div {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: baseline;
+  gap: 6px;
   min-width: 0;
+}
+
+.record-fields div:not(:first-child)::before {
+  content: "";
+  align-self: center;
+  width: 1px;
+  height: 10px;
+  margin-right: var(--sp-3);
+  background: var(--line-strong);
 }
 
 .record-fields dt {
   font-family: var(--font-sans);
   font-size: 10px;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--text-dim);
@@ -583,8 +599,8 @@ em {
 
 .record-fields dd {
   font-family: var(--font-sans);
-  font-size: 13.5px;
-  color: var(--text);
+  font-size: 13px;
+  color: var(--text-muted);
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
@@ -725,20 +741,92 @@ em {
 }
 
 /* ---------------------------------------------------------------------
-   Responsive
+   Responsive — mobile is art-directed, not a shrunk desktop layout.
+   Every record becomes a single stacked plate: full-width print first,
+   caption below. The feature entry stays taller than the rest so the
+   archive still has one dominant image on a small screen.
 --------------------------------------------------------------------- */
 @media (max-width: 720px) {
+  .wrap {
+    padding: 0 var(--sp-3);
+  }
+
   .hero {
-    padding: 96px 0 56px;
+    min-height: auto;
+    padding: 88px 0 var(--sp-6);
   }
-  .record {
-    grid-template-columns: 96px 1fr;
+
+  .hero-inner {
+    gap: var(--sp-5);
+  }
+
+  .hero-content {
+    padding-top: 0;
     gap: var(--sp-3);
-    padding: var(--sp-4) 0;
   }
-  .record-fields {
+
+  .hero-desc {
+    max-width: 440px;
+  }
+
+  .episodes,
+  .about {
+    padding: var(--sp-6) 0;
+  }
+
+  .section-head {
+    margin-bottom: var(--sp-4);
+  }
+
+  /* Filter reads as a single scrollable line, not a wrapped button cloud */
+  .collections-filter {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: var(--sp-4);
+    margin: 0 calc(var(--sp-3) * -1) var(--sp-1);
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .collections-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .collections-filter-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 14px 2px;
+  }
+
+  .record {
     grid-template-columns: 1fr;
-    gap: var(--sp-2);
-    margin: var(--sp-2) 0;
+    gap: var(--sp-3);
+    padding: var(--sp-5) 0;
+  }
+
+  .episode-title {
+    font-size: 1.15rem;
+  }
+
+  .record-fields {
+    gap: 4px var(--sp-3);
+    margin: var(--sp-2) 0 var(--sp-3);
+  }
+
+  .record-fields dd {
+    font-size: 12.5px;
+  }
+
+  .episode-link {
+    padding: 13px 0;
+  }
+
+  .about-grid {
+    gap: var(--sp-5);
+  }
+
+  .link-cta-ring {
+    width: 44px;
+    height: 44px;
   }
 }
