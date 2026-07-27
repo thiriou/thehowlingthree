@@ -24,6 +24,12 @@
 
   --max-width: 1120px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* One motion system, three speeds — nothing on the site animates outside
+     these. A mix of ad-hoc durations and the browser's default `ease`
+     reads as untended; a single curve applied everywhere reads as chosen. */
+  --dur-fast: 0.2s;
+  --dur-base: 0.4s;
+  --dur-slow: 0.6s;
 
   /* Spacing scale — every major rhythm value on the site resolves to one
      of these. Nothing sits at an arbitrary number. */
@@ -129,7 +135,7 @@ em {
   z-index: 400;
   background: transparent;
   border-bottom: 1px solid transparent;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition: background var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 
 .site-header.is-scrolled {
@@ -141,8 +147,8 @@ em {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 18px 24px;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -163,7 +169,7 @@ em {
 .main-nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: var(--sp-4);
 }
 
 .main-nav a {
@@ -175,7 +181,7 @@ em {
   color: var(--text-muted);
   padding: 6px 0;
   border-bottom: 1px solid transparent;
-  transition: color 0.25s ease, border-color 0.25s ease;
+  transition: color var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 
 .main-nav a:hover,
@@ -203,7 +209,7 @@ em {
   object-fit: contain;
   filter: invert(1) grayscale(1);
   opacity: 0.5;
-  transition: opacity 0.25s ease;
+  transition: opacity var(--dur-fast) var(--ease);
   display: block;
 }
 
@@ -219,12 +225,21 @@ em {
 
 .nav-toggle {
   display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   background: none;
   border: 1px solid var(--line);
   border-radius: 4px;
   color: var(--text);
   padding: 8px;
   cursor: pointer;
+  transition: border-color var(--dur-base) var(--ease);
+}
+
+.nav-toggle:hover {
+  border-color: var(--line-strong);
 }
 
 .mobile-nav {
@@ -253,7 +268,7 @@ em {
 
 .mobile-nav .mobile-socials {
   display: flex;
-  gap: 20px;
+  gap: var(--sp-3);
   padding-top: 14px;
 }
 
@@ -298,7 +313,7 @@ em {
 }
 
 .hero-mark {
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.3));
 }
 
 .hero-logo {
@@ -329,7 +344,7 @@ em {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 22px;
+  gap: var(--sp-3);
 }
 
 @media (max-width: 900px) {
@@ -370,16 +385,17 @@ em {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid var(--line-strong);
   color: var(--gold);
-  transition: background 0.25s ease, color 0.25s ease;
+  transition: background var(--dur-base) var(--ease), color var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 
 .link-cta:hover .link-cta-ring {
   background: var(--gold);
+  border-color: var(--gold);
   color: var(--bg);
 }
 
@@ -400,7 +416,7 @@ em {
   color: var(--text-muted);
   padding-bottom: 4px;
   border-bottom: 1px solid transparent;
-  transition: color 0.25s ease, border-color 0.25s ease, gap 0.25s ease;
+  transition: color var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease), gap var(--dur-base) var(--ease);
 }
 
 .link-ghost:hover {
@@ -445,11 +461,12 @@ em {
   color: var(--text-dim);
   border-bottom: 1px solid transparent;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: color var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
 }
 
 .collections-filter-btn:hover {
   color: var(--text-muted);
+  border-bottom-color: var(--line);
 }
 
 .collections-filter-btn.is-active {
@@ -481,11 +498,18 @@ em {
   gap: var(--sp-2);
 }
 
-/* The mat: a small reveal of ground around the print before the frame
-   line, the way an archival photograph is mounted rather than glued
-   edge-to-edge. */
 .record-frame {
   position: relative;
+  transition: transform var(--dur-slow) var(--ease);
+}
+
+/* The print lifts, not the whole row — a small, deliberate gesture (like
+   tilting a photograph off the page) rather than a card-hover cliché.
+   Transforming the frame itself, not the <img> inside it, keeps the
+   registered logo overlay (a child of this element) moving in lockstep
+   with the artwork so alignment never drifts on hover. */
+.record:hover .record-frame {
+  transform: scale(1.015);
 }
 
 /* Records whose print was sourced from the channel's own video archive
@@ -521,7 +545,7 @@ em {
   object-fit: cover;
   display: block;
   filter: grayscale(0.1) contrast(1.02);
-  transition: filter 0.4s ease;
+  transition: filter var(--dur-slow) var(--ease);
 }
 
 .record:hover .record-frame img {
@@ -618,7 +642,7 @@ em {
   font-weight: 700;
   color: var(--text-dim);
   border-bottom: 1px solid transparent;
-  transition: color 0.3s ease, border-color 0.25s ease, gap 0.25s ease;
+  transition: color var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease), gap var(--dur-base) var(--ease);
   width: fit-content;
 }
 
@@ -664,6 +688,7 @@ em {
 }
 
 .about-copy p {
+  max-width: 60ch;
   color: var(--text-muted);
   font-size: 15.5px;
   line-height: 1.85;
@@ -682,7 +707,7 @@ em {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: var(--sp-3);
 }
 
 .footer-brand span {
@@ -694,7 +719,7 @@ em {
 
 .footer-socials {
   display: flex;
-  gap: 20px;
+  gap: var(--sp-3);
 }
 
 .footer-socials a {
@@ -703,6 +728,7 @@ em {
   text-transform: uppercase;
   font-weight: 600;
   color: var(--text-muted);
+  transition: color var(--dur-base) var(--ease);
 }
 
 .footer-socials a:hover {
@@ -720,7 +746,7 @@ em {
 --------------------------------------------------------------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(var(--sp-1));
   transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
 }
 
@@ -795,7 +821,7 @@ em {
   .collections-filter-btn {
     flex: 0 0 auto;
     white-space: nowrap;
-    padding: 14px 2px;
+    padding: 16px 2px;
   }
 
   .record {
@@ -818,7 +844,7 @@ em {
   }
 
   .episode-link {
-    padding: 13px 0;
+    padding: 15px 0;
   }
 
   .about-grid {
