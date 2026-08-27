@@ -126,7 +126,7 @@
           </div>
         </article>
 
-        <article class="record reveal" data-collection="pools">
+        <article class="record reveal" data-collection="pools" data-latest="true">
           <div class="record-media">
             <div class="record-frame"><img loading="lazy" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/36414991/36414991-1786461574746-d03239aa965e4.jpg" alt="Επ. 106 - Night Swim (2024)" /></div>
             <span class="record-id">THT—106</span>
@@ -147,7 +147,7 @@
           </div>
         </article>
 
-        <article class="record reveal" data-collection="">
+        <article class="record reveal" data-collection="" data-latest="true">
           <div class="record-media">
             <div class="record-frame"><img loading="lazy" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/36414991/36414991-1785154429001-b93d9ac0ad5ac.jpg" alt="Επ. 105 - Garden State (2004)" /></div>
             <span class="record-id">THT—105</span>
@@ -167,7 +167,7 @@
           </div>
         </article>
 
-        <article class="record reveal" data-collection="friendship">
+        <article class="record reveal" data-collection="friendship" data-latest="true">
           <div class="record-media">
             <div class="record-frame"><img loading="lazy" src="https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/36414991/36414991-1784044667336-2f34a55051806.jpg" alt="Επ. 104 - Dolphin Summer (2025)" /></div>
             <span class="record-id">THT—104</span>
@@ -1042,7 +1042,7 @@
           </div>
         </article>
 
-        <article class="record reveal" data-collection="greece">
+        <article class="record reveal" data-collection="greece friendship">
           <div class="record-media">
             <div class="record-frame record-frame--yt"><img loading="lazy" src="https://i.ytimg.com/vi/JtmuVF3S7Fc/maxresdefault.jpg" alt="Επ. 61 - Tsatsiki, Mum and the Policeman (1999)" /></div>
             <span class="record-id">THT—061</span>
@@ -1053,7 +1053,7 @@
               <div><dt>Σκηνοθεσία</dt><dd>Ella Lemhagen</dd></div>
               <div><dt>Χώρα</dt><dd>Σουηδία</dd></div>
               <div><dt>Είδος</dt><dd>Οικογενειακή κωμωδία</dd></div>
-              <div><dt>Συλλογή</dt><dd>Η Ελλάδα μας</dd></div>
+              <div><dt>Συλλογή</dt><dd>Η Ελλάδα μας / Η δύναμη της φιλίας</dd></div>
               <div><dt>Διάρκεια</dt><dd>43m</dd></div>
             </dl>
             <a class="episode-link" href="https://open.spotify.com/episode/0nffRDmijT0Nn7HIHmCau6" target="_blank" rel="noopener noreferrer">
@@ -2415,7 +2415,7 @@
             ? true
             : target === "latest"
             ? record.getAttribute("data-latest") === "true"
-            : record.getAttribute("data-collection") === target;
+            : (record.getAttribute("data-collection") || "").split(/\s+/).indexOf(target) !== -1;
         record.classList.toggle("is-filtered-out", !match);
       });
     }
